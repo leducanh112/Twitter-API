@@ -13,7 +13,8 @@ import {
   updateMeController,
   followController,
   getProfileController,
-  unfollowController
+  unfollowController,
+  oauthController
 } from '~/controllers/users.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
 import {
@@ -37,6 +38,7 @@ import { wrapRequestHandler } from '~/utils/handlers'
 const usersRouter = Router()
 
 usersRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
+usersRouter.get('/oauth/google', wrapRequestHandler(oauthController))
 usersRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
 usersRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequestHandler(logoutController))
 usersRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(verifyEmailController))

@@ -61,5 +61,10 @@ export const USERS_MESSAGES = {
   FOLLOWED: 'You have already followed this user',
   INVALID_USER_ID: 'Invalid user ID',
   UNFOLLOW_USER_SUCCESSFUL: 'Unfollow user successful',
-  ALREADY_UNFOLLOWED: 'You have already unfollowed this user'
+  ALREADY_UNFOLLOWED: 'You have already unfollowed this user',
+  GOOGLE_EMAIL_NOT_VERIFIED: 'Google email is not verified',
+  OAUTH_SUCCESS: 'OAUTH success',
+  OAUTH_LOGIN_SUCCESS: 'OAUTH login successful',
+  OAUTH_REGISTRATION_SUCCESSFUL: 'OAUTH registration successful',
+  UPLOAD_IMAGE_SUCCESSFUL: 'Upload image successful'
 } as const

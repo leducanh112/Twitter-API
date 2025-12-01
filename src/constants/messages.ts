@@ -67,5 +67,6 @@ export const USERS_MESSAGES = {
   OAUTH_LOGIN_SUCCESS: 'OAUTH login successful',
   OAUTH_REGISTRATION_SUCCESSFUL: 'OAUTH registration successful',
   UPLOAD_IMAGE_SUCCESSFUL: 'Upload image successful',
-  UPLOAD_VIDEO_SUCCESSFUL: 'Upload video successful'
+  UPLOAD_VIDEO_SUCCESSFUL: 'Upload video successful',
+  REFRESH_TOKEN_SUCCESSFUL: 'Refresh token successful'
 } as const

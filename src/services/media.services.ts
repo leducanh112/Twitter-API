@@ -8,6 +8,8 @@ import { isProduction } from '~/constants/config'
 import { config } from 'dotenv'
 import { MediaType } from '~/constants/enums'
 import { Media } from '~/models/Others'
+import { encodeHLSWithMultipleVideoStreams } from '~/utils/video'
+import fsPromises from 'fs/promises'
 
 config()
 class MediaService {
@@ -31,7 +33,6 @@ class MediaService {
   }
   async uploadVideo(req: Request) {
     const files = await handleUploadVideo(req)
-    console.log('files', files)
     const newFilename = files[0].newFilename
 
     return {
@@ -40,6 +41,23 @@ class MediaService {
         : `http://localhost:${process.env.PORT}/static/video/${newFilename}`,
       type: MediaType.Video
     }
+  }
+  async uploadVideoHLS(req: Request) {
+    const files = await handleUploadVideo(req)
+    const result: Media[] = await Promise.all(
+      files.map(async (file) => {
+        await encodeHLSWithMultipleVideoStreams(file.filepath)
+        const newName = getNameFromFullName(file.newFilename)
+        await fsPromises.unlink(file.filepath)
+        return {
+          url: isProduction
+            ? `${process.env.HOST}/static/video-hls/${newName}`
+            : `http://localhost:${process.env.PORT}/static/video-hls/${newName}`,
+          type: MediaType.HLS
+        }
+      })
+    )
+    return result
   }
 }
 

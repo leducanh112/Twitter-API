@@ -70,3 +70,29 @@ export const USERS_MESSAGES = {
   UPLOAD_VIDEO_SUCCESSFUL: 'Upload video successful',
   REFRESH_TOKEN_SUCCESSFUL: 'Refresh token successful'
 } as const
+
+export const TWEETS_MESSAGES = {
+  INVALID_TYPE: 'Invalid tweet type',
+  INVALID_AUDIENCE: 'Invalid tweet audience',
+  CREATE_TWEET_SUCCESSFUL: 'Create tweet successful',
+  PARENT_ID_MUST_BE_A_VALID_TWEET_ID: 'Parent ID must be a valid tweet ID',
+  PARENT_ID_MUST_NE_NULL: 'Parent id must be null',
+  CONTENT_MUST_BE_A_NON_EMPTY_STRING: 'Content must be a non-empty string',
+  CONTENT_MUST_BE_EMPTY_STRING: 'Content must be an empty string',
+  HASHTAGS_MUST_BE_AN_ARRAY_OF_STRING: 'Hashtags must be an array of strings',
+  MENTIONS_MUST_BE_AN_ARRAY_OF_USER_ID: 'Mentions must be an array of user IDs',
+  MEDIA_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECTS: 'Media must be an array of media objects',
+  INVALID_TWEET_ID: 'Invalid tweet ID',
+  TWEET_NOT_FOUND: 'Tweet not found',
+  GET_TWEET_SUCCESSFUL: 'Get tweet successful'
+} as const
+
+export const BOOKMARK_MESSAGES = {
+  BOOKMARK_SUCESSFULLY: 'Bookmark successfully',
+  UNBOOKMARK_SUCCESSFULLY: 'Unbookmark successfully'
+} as const
+
+export const LIKES_MESSAGES = {
+  LIKE_TWEET_SUCCESSFUL: 'Like tweet successful',
+  UNLIKE_TWEET_SUCCESSFUL: 'Unlike tweet successful'
+}

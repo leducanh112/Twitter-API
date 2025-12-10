@@ -17,6 +17,7 @@
   "description": "",
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
     "@types/formidable": "^3.4.6",
     "@types/jsonwebtoken": "^9.0.10",
@@ -39,18 +40,34 @@
     "typescript-eslint": "^8.46.3"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.947.0",
+    "@aws-sdk/client-ses": "^3.947.0",
+    "@aws-sdk/lib-storage": "^3.947.0",
     "@faker-js/faker": "^10.1.0",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "axios": "^1.13.2",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
     "express-validator": "^7.3.0",
     "formidable": "^3.5.4",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mime": "^4.1.0",
     "minimist": "^1.2.8",
     "mongodb": "^7.0.0",
     "nanoid": "^5.1.6",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "socket.io": "^4.8.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "yaml": "^2.8.2"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.9",
+    "utf-8-validate": "^6.0.5"
   }
 }

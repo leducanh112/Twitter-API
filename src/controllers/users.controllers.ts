@@ -104,8 +104,8 @@ export const verifyEmailController = async (
 }
 
 export const resendVerifyEmailController = async (req: Request, res: Response, next: NextFunction) => {
-  const user = req.decoded_access_token as TokenPayload
-  await databaseService.users.findOne({ _id: new ObjectId(user.user_id) })
+  const { user_id } = req.decoded_access_token as TokenPayload
+  const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
   if (!user) {
     return res.status(HTTP_STATUS.NOT_FOUND).json({
       message: USERS_MESSAGES.USER_NOT_FOUND
@@ -116,7 +116,7 @@ export const resendVerifyEmailController = async (req: Request, res: Response, n
       message: USERS_MESSAGES.EMAIL_ALREADY_VERIFIED_BEFORE
     })
   }
-  const result = await usersService.resendVerifyEmail(user.user_id)
+  const result = await usersService.resendVerifyEmail(user_id, user.email)
   return res.json({
     result
   })
@@ -127,8 +127,8 @@ export const forgotPasswordController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { _id, verify } = req.user as User
-  const result = await usersService.forgotPassword({ user_id: _id.toString(), verify })
+  const { _id, verify, email } = req.user as User
+  const result = await usersService.forgotPassword({ user_id: _id.toString(), email, verify })
   return res.json(result)
 }
 

@@ -13,6 +13,7 @@ import Follower from '~/models/schemas/Followers.schema'
 import axios from 'axios'
 import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
+import { sendForgotPasswordEmail, sendVerifyEmailRegister } from '~/utils/email'
 
 config()
 
@@ -88,6 +89,8 @@ class UsersService {
       new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token, iat, exp })
     )
     console.log('email_verify_token:', email_verify_token)
+    //Flow: server send email to user -> user click link in email -> link redirect to client -> client call API verify-email with token -> server verify email and return new access token and refresh token
+    await sendVerifyEmailRegister(payload.email, email_verify_token)
     return { access_token, refresh_token }
   }
 
@@ -245,11 +248,13 @@ class UsersService {
     }
   }
 
-  async resendVerifyEmail(user_id: string) {
+  async resendVerifyEmail(user_id: string, email: string) {
     const email_verify_token = await this.signEmailVerifyToken({
       user_id,
       verify: UserVerifyStatus.Unverified
     })
+    await sendVerifyEmailRegister(email, email_verify_token)
+
     await databaseService.users.updateOne(
       { _id: new ObjectId(user_id) },
       {
@@ -266,8 +271,11 @@ class UsersService {
     }
   }
 
-  async forgotPassword({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
+  async forgotPassword({ user_id, email, verify }: { user_id: string; email: string; verify: UserVerifyStatus }) {
     const forgot_password_token = await this.signForgotPasswordToken({ user_id, verify })
+
+    await sendForgotPasswordEmail(email, forgot_password_token)
+
     await databaseService.users.updateOne(
       { _id: new ObjectId(user_id) },
       {

@@ -7,6 +7,7 @@ import Tweet from '~/models/schemas/Tweet.schema'
 import Hashtag from '~/models/schemas/Hashtag.schema'
 import Bookmark from '~/models/schemas/Bookmark.schema'
 import Like from '~/models/schemas/Like.schema'
+import Conversation from '~/models/schemas/Conversation.schema'
 
 config()
 const uri = process.env.DB_URI || 'mongodb://127.0.0.1:27017'
@@ -33,7 +34,6 @@ class DatabaseService {
     if (!exists) {
       this.users.createIndex({ email: 1, password: 1 })
       this.users.createIndex({ email: 1 }, { unique: true })
-      this.users.createIndex({ username: 1 }, { unique: true })
     }
   }
 
@@ -53,9 +53,10 @@ class DatabaseService {
   }
 
   async indexTweets() {
-    const exists = await this.tweets.indexExists(['user_id_1'])
+    const exists = await this.tweets.indexExists(['user_id_1', 'content_text'])
     if (!exists) {
       this.tweets.createIndex({ user_id: 1 })
+      this.tweets.createIndex({ content: 'text' }, { default_language: 'none' })
     }
   }
 
@@ -106,6 +107,9 @@ class DatabaseService {
 
   get likes(): Collection<Like> {
     return this.db.collection<Like>(process.env.DB_LIKES_COLLECTION as string)
+  }
+  get conversations(): Collection<Conversation> {
+    return this.db.collection<Conversation>(process.env.DB_CONVERSATIONS_COLLECTION as string)
   }
 }
 

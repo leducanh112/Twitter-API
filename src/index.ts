@@ -28,11 +28,16 @@ const file = fs.readFileSync(path.resolve('twitter-swagger.yaml'), 'utf8')
 const swaggerDocument = YAML.parse(file)
 config()
 
-databaseService.connect().then(() => {
-  databaseService.indexUsers()
-  databaseService.indexRefreshTokens()
-  databaseService.indexFollowers()
-  databaseService.indexTweets()
+databaseService.connect().then(async () => {
+  await databaseService.indexUsers()
+  await databaseService.indexRefreshTokens()
+  await databaseService.indexFollowers()
+  await databaseService.indexTweets()
+  await databaseService.indexHashtags()
+  await databaseService.indexBookmarks()
+  await databaseService.indexLikes()
+}).catch(err => {
+  console.error('❌ Error initializing database indexes:', err)
 })
 
 const app = express()

@@ -7,7 +7,7 @@ import Tweet from '~/models/schemas/Tweet.schema'
 import Hashtag from '~/models/schemas/Hashtag.schema'
 import Bookmark from '~/models/schemas/Bookmark.schema'
 import Like from '~/models/schemas/Like.schema'
-import Conversation from '~/models/schemas/Conversation.schema'
+import Conversation from '~/models/schemas/Conversations.schema'
 
 config()
 const uri = process.env.DB_URI || 'mongodb://127.0.0.1:27017'
@@ -23,17 +23,49 @@ class DatabaseService {
   async connect() {
     try {
       await this.client.connect()
-      console.log('✅ Connected successfully to MongoDB local')
+      console.log('✅ Connected successfully to MongoDB')
+      await this.createCollectionsIfNotExist()
     } catch (err) {
       console.error('❌ MongoDB connection error:', err)
     }
   }
 
+  private async createCollectionsIfNotExist() {
+    try {
+      const collections = await this.db.listCollections().toArray()
+      const collectionNames = collections.map(c => c.name)
+
+      const requiredCollections = [
+        process.env.DB_USERS_COLLECTION,
+        process.env.DB_REFRESH_TOKENS_COLLECTION,
+        process.env.DB_FOLLOWERS_COLLECTION,
+        process.env.DB_TWEETS_COLLECTION,
+        process.env.DB_HASHTAGS_COLLECTION,
+        process.env.DB_BOOKMARKS_COLLECTION,
+        process.env.DB_LIKES_COLLECTION,
+        process.env.DB_CONVERSATIONS_COLLECTION
+      ]
+
+      for (const collectionName of requiredCollections) {
+        if (collectionName && !collectionNames.includes(collectionName)) {
+          await this.db.createCollection(collectionName)
+          console.log(`✅ Created collection: ${collectionName}`)
+        }
+      }
+    } catch (err) {
+      console.warn('⚠️ Error creating collections:', err)
+    }
+  }
+
   async indexUsers() {
-    const exists = await this.users.indexExists(['email_1_password_1', 'email_1', 'username_1'])
-    if (!exists) {
-      this.users.createIndex({ email: 1, password: 1 })
-      this.users.createIndex({ email: 1 }, { unique: true })
+    try {
+      const exists = await this.users.indexExists(['email_1_password_1', 'email_1', 'username_1'])
+      if (!exists) {
+        this.users.createIndex({ email: 1, password: 1 })
+        this.users.createIndex({ email: 1 }, { unique: true })
+      }
+    } catch (err) {
+      console.warn('⚠️ Could not create indexes for users collection:', err)
     }
   }
 
